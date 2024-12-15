@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+//Merhaba sanırım sende bir yazılımcısın ve benim koduma bakıyorsun (: 
+<head>
+<style>
+canvas {border:2px solid #999;}
+</style>
+</head>
+<body>
+<canvas id="tuval1" height="500" width="650"></canvas>
+<div>
+  <label for="colorPicker">Renk Seç:</label>
+  <input type="color" id="colorPicker" value="#000000">
+</div>
+<div>
+  <label for="eraser">Silgi Modu:</label>
+  <input type="checkbox" id="eraser">
+</div>
+<script>
+window.onload = function () {
+  var tuval = document.getElementById("tuval1");
+  var ctx = tuval.getContext("2d");
+  var isDrawing = false;
+
+
+  var currentColor = "#000000";
+
+  document.getElementById("colorPicker").addEventListener("input", function(event) {
+    currentColor = event.target.value;
+    if (!document.getElementById("eraser").checked) {
+      ctx.fillStyle = currentColor; // Yeni rengi ayarla
+    }
+  });
+
+
+  function getMousePos(event) {
+    const rect = tuval.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+  }
+
+  tuval.addEventListener("mousedown", function (event) {
+    isDrawing = true;
+  });
+
+
+  tuval.addEventListener("mousemove", function (event) {
+    if (isDrawing) {
+      let pos = getMousePos(event);
+      if (document.getElementById("eraser").checked) {
+        ctx.fillStyle = "#FFFFFF"; 
+      } else {
+        ctx.fillStyle = currentColor;
+      }
+      ctx.fillRect(pos.x, pos.y, 10, 10); 
+    }
+  });
+
+  tuval.addEventListener("mouseup", function () {
+    isDrawing = false;
+  });
+
+  tuval.addEventListener("mouseleave", function () {
+    isDrawing = false;
+  });
+};
+</script>
+</body>
+</html>
